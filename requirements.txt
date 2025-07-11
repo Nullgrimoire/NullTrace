@@ -1,0 +1,5 @@
+# NullTrace - IP Recon Tool Dependencies
+# Core dependencies for network scanning and banner grabbing
+
+colorama>=0.4.4
+requests>=2.25.1

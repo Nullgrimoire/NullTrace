@@ -14,7 +14,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'nulltrace=NullTrace:main'
+            'nulltrace=nulltrace.NullTrace:main'
         ],
     },
     classifiers=[

@@ -1,6 +1,6 @@
 import socket
 from concurrent.futures import ThreadPoolExecutor
-from banners import probe_service
+from nulltrace.banners import probe_service
 
 COMMON_PORTS = {
     21: "FTP",

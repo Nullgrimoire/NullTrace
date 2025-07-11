@@ -4,9 +4,9 @@
 import argparse
 import ipaddress
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from scanner import scan_target, COMMON_PORTS
-from output import save_report
-from hints import get_hint
+from nulltrace.scanner import scan_target, COMMON_PORTS
+from nulltrace.output import save_report
+from nulltrace.hints import get_hint
 from colorama import Fore, Style, init
 
 init(autoreset=True)
@@ -54,7 +54,7 @@ def threaded_scan(net, ports, brief, output_template, summary_path):
 
     if summary_path:
         try:
-            from output import write_combined_report
+            from nulltrace.output import write_combined_report
             write_combined_report(summary_path, summary)
         except Exception as e:
             print(Fore.RED + f"[!] Failed to write summary: {e}" + Style.RESET_ALL)
