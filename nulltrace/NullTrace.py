@@ -73,8 +73,10 @@ def main():
     if args.test:
         target_ip = "scanme.nmap.org"
         print(Fore.YELLOW + "[*] Test mode enabled: scanning scanme.nmap.org" + Style.RESET_ALL)
-        run_scan_for_ip(target_ip, ports, args.brief)
+        result = run_scan_for_ip(target_ip, ports, args.brief)
         print(Fore.YELLOW + "\n[✓] Test complete — NullTrace is working as intended." + Style.RESET_ALL)
+        if args.format == "md":
+            write_markdown_report("recon.md", [result])
         return
 
     if not args.target:
@@ -86,7 +88,9 @@ def main():
         md_path = "recon.md" if args.format == "md" else None
         threaded_scan(net, ports, args.brief, args.output, "recon_all.json", md_path)
     except ValueError:
-        run_scan_for_ip(args.target, ports, args.brief, args.output)
+        result = run_scan_for_ip(args.target, ports, args.brief, args.output)
+        if args.format == "md":
+            write_markdown_report("recon.md", [result])
 
 if __name__ == "__main__":
     main()
