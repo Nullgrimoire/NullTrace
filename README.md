@@ -2,6 +2,10 @@
 
 > Network recon ritual tool – IP scanner, banner grabber, and hint engine for pentesters, red teamers, and OSCP labs.
 
+![Python](https://img.shields.io/badge/python-3.7%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/stability-stable-brightgreen)
+
 ## Features
 - Multi-threaded port scanning
 - CIDR & subnet support (e.g., `192.168.1.0/24`)
