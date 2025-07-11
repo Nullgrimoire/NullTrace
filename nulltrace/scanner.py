@@ -20,9 +20,16 @@ COMMON_PORTS = {
 
 def scan_port(ip, port, timeout=1):
     try:
+        # Validate port range
+        if not isinstance(port, int) or not (0 < port < 65536):
+            return None
         with socket.create_connection((ip, port), timeout=timeout):
             return probe_service(ip, port, timeout)
-    except:
+    except (socket.timeout, socket.error, ValueError, OSError):
+        # Ignore connection errors, bad ports, and timeouts
+        return None
+    except Exception:
+        # Catch-all for any other unexpected errors
         return None
 
 def scan_target(ip, ports, timeout=1):

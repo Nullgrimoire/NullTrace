@@ -34,25 +34,43 @@ def generic_banner(ip, port, timeout):
                 "service": "Unknown",
                 "banner": banner or "No banner"
             }
-    except:
-        return None
+    except Exception as e:
+        return {
+            "port": port,
+            "service": "Unknown",
+            "banner": f"Error: {str(e)}"
+        }
 
 def probe_ftp(ip, port, timeout):
-    with socket.create_connection((ip, port), timeout=timeout) as sock:
-        banner = sock.recv(1024).decode(errors='ignore').strip()
+    try:
+        with socket.create_connection((ip, port), timeout=timeout) as sock:
+            banner = sock.recv(1024).decode(errors='ignore').strip()
+            return {
+                "port": port,
+                "service": "FTP",
+                "banner": banner or "No banner"
+            }
+    except Exception as e:
         return {
             "port": port,
             "service": "FTP",
-            "banner": banner or "No banner"
+            "banner": f"Error: {str(e)}"
         }
 
 def probe_ssh(ip, port, timeout):
-    with socket.create_connection((ip, port), timeout=timeout) as sock:
-        banner = sock.recv(1024).decode(errors='ignore').strip()
+    try:
+        with socket.create_connection((ip, port), timeout=timeout) as sock:
+            banner = sock.recv(1024).decode(errors='ignore').strip()
+            return {
+                "port": port,
+                "service": "SSH",
+                "banner": banner or "No banner"
+            }
+    except Exception as e:
         return {
             "port": port,
             "service": "SSH",
-            "banner": banner or "No banner"
+            "banner": f"Error: {str(e)}"
         }
 
 def probe_http(ip, port, timeout, ssl_enabled):
@@ -76,10 +94,17 @@ def probe_http(ip, port, timeout, ssl_enabled):
         }
 
 def probe_mysql(ip, port, timeout):
-    with socket.create_connection((ip, port), timeout=timeout) as sock:
-        banner = sock.recv(1024).decode(errors='ignore').strip()
+    try:
+        with socket.create_connection((ip, port), timeout=timeout) as sock:
+            banner = sock.recv(1024).decode(errors='ignore').strip()
+            return {
+                "port": port,
+                "service": "MySQL",
+                "banner": banner or "No banner"
+            }
+    except Exception as e:
         return {
             "port": port,
             "service": "MySQL",
-            "banner": banner or "No banner"
+            "banner": f"Error: {str(e)}"
         }

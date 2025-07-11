@@ -3,6 +3,7 @@
 
 import argparse
 import ipaddress
+import socket
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from nulltrace.scanner import scan_target, COMMON_PORTS
 from nulltrace.output import save_report, write_combined_report, write_markdown_report
@@ -33,13 +34,18 @@ def format_result(r, brief=False):
     return f"[+] {r['port']:5}/tcp - {r['service']:8} - {r['banner']}{extra}"
 
 def run_scan_for_ip(ip, ports, brief, output_path=None):
-    print(Fore.CYAN + f"[*] Scanning {ip} on {len(ports)} ports..." + Style.RESET_ALL)
-    results = scan_target(str(ip), ports)
+    try:
+        resolved_ip = socket.gethostbyname(ip)
+    except socket.gaierror:
+        print(Fore.RED + f"[!] Could not resolve hostname: {ip}" + Style.RESET_ALL)
+        return {"ip": ip, "open_ports": [], "error": "DNS resolution failed"}
+    print(Fore.CYAN + f"[*] Scanning {resolved_ip} on {len(ports)} ports..." + Style.RESET_ALL)
+    results = scan_target(str(resolved_ip), ports)
     for r in results:
         print(Fore.GREEN + format_result(r, brief) + Style.RESET_ALL)
     if output_path:
-        save_report(str(ip), results, output_path)
-    return {"ip": str(ip), "open_ports": results}
+        save_report(str(resolved_ip), results, output_path)
+    return {"ip": str(resolved_ip), "open_ports": results}
 
 def threaded_scan(net, ports, brief, output_template, summary_path, md_path=None):
     summary = []
@@ -49,9 +55,14 @@ def threaded_scan(net, ports, brief, output_template, summary_path, md_path=None
             for ip in net
         }
         for future in as_completed(futures):
-            result = future.result()
-            if result:
-                summary.append(result)
+            try:
+                result = future.result()
+                if result:
+                    summary.append(result)
+            except Exception as e:
+                ip = futures[future]
+                print(Fore.RED + f"[!] Scan failed for {ip}: {e}" + Style.RESET_ALL)
+                summary.append({"ip": str(ip), "open_ports": [], "error": str(e)})
 
     if summary_path:
         write_combined_report(summary_path, summary)
