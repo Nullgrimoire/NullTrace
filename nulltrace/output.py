@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime
 from colorama import Fore, Style
 
@@ -9,6 +10,8 @@ def save_report(ip, data, output_file):
         "open_ports": data
     }
     try:
+        # Ensure output directory exists
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, "w") as f:
             json.dump(report, f, indent=2)
         print(Fore.GREEN + f"\n[+] Report saved to {output_file}" + Style.RESET_ALL)
@@ -17,6 +20,8 @@ def save_report(ip, data, output_file):
 
 def write_combined_report(path, data):
     try:
+        # Ensure output directory exists
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
         print(Fore.GREEN + f"\n[+] Combined report saved to {path}" + Style.RESET_ALL)

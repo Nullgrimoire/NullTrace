@@ -3,16 +3,16 @@ import ssl
 import re
 import requests
 
-def probe_service(ip, port, timeout=1):
+def probe_service(ip, port, timeout=1, verify_cert=True):
     try:
         if port == 21:
             return probe_ftp(ip, port, timeout)
         elif port == 22:
             return probe_ssh(ip, port, timeout)
         elif port in (80, 8080):
-            return probe_http(ip, port, timeout, ssl_enabled=False)
+            return probe_http(ip, port, timeout, ssl_enabled=False, verify_cert=verify_cert)
         elif port == 443:
-            return probe_http(ip, port, timeout, ssl_enabled=True)
+            return probe_http(ip, port, timeout, ssl_enabled=True, verify_cert=verify_cert)
         elif port == 3306:
             return probe_mysql(ip, port, timeout)
         else:
@@ -73,11 +73,11 @@ def probe_ssh(ip, port, timeout):
             "banner": f"Error: {str(e)}"
         }
 
-def probe_http(ip, port, timeout, ssl_enabled):
+def probe_http(ip, port, timeout, ssl_enabled, verify_cert=True):
     try:
         proto = "https" if ssl_enabled else "http"
         url = f"{proto}://{ip}:{port}"
-        response = requests.get(url, timeout=timeout, verify=False)
+        response = requests.get(url, timeout=timeout, verify=verify_cert)
         server = response.headers.get("Server", "Unknown")
         title_match = re.search(r"<title>(.*?)</title>", response.text, re.IGNORECASE)
         title = title_match.group(1).strip() if title_match else "No title"
