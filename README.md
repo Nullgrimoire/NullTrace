@@ -4,7 +4,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.7%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Status](https://img.shields.io/badge/stability-stable-brightgreen)
+![CI](https://github.com/Nullgrimoire/NullTrace/actions/workflows/python-app.yml/badge.svg)
 
 ## Features
 - Multi-threaded port scanning
