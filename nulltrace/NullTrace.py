@@ -4,9 +4,9 @@
 import argparse
 import ipaddress
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from nulltrace.scanner import scan_target, COMMON_PORTS
-from nulltrace.output import save_report
-from nulltrace.hints import get_hint
+from scanner import scan_target, COMMON_PORTS
+from output import save_report, write_combined_report, write_markdown_report
+from hints import get_hint
 from colorama import Fore, Style, init
 
 init(autoreset=True)
@@ -40,7 +40,7 @@ def run_scan_for_ip(ip, ports, brief, output_path=None):
         save_report(str(ip), results, output_path)
     return {"ip": str(ip), "open_ports": results}
 
-def threaded_scan(net, ports, brief, output_template, summary_path):
+def threaded_scan(net, ports, brief, output_template, summary_path, md_path=None):
     summary = []
     with ThreadPoolExecutor(max_workers=32) as executor:
         futures = {
@@ -53,11 +53,9 @@ def threaded_scan(net, ports, brief, output_template, summary_path):
                 summary.append(result)
 
     if summary_path:
-        try:
-            from nulltrace.output import write_combined_report
-            write_combined_report(summary_path, summary)
-        except Exception as e:
-            print(Fore.RED + f"[!] Failed to write summary: {e}" + Style.RESET_ALL)
+        write_combined_report(summary_path, summary)
+    if md_path:
+        write_markdown_report(md_path, summary)
 
 def main():
     print_banner()
@@ -67,6 +65,7 @@ def main():
     parser.add_argument("--ports", nargs="*", type=int, help="Custom ports to scan")
     parser.add_argument("--test", action="store_true", help="Run against a known safe test target (scanme.nmap.org)")
     parser.add_argument("--brief", action="store_true", help="Only show open ports without banner details")
+    parser.add_argument("--format", choices=["json", "md"], help="Output format for combined report")
     args = parser.parse_args()
 
     ports = args.ports if args.ports else list(COMMON_PORTS.keys())
@@ -84,7 +83,8 @@ def main():
 
     try:
         net = ipaddress.ip_network(args.target, strict=False)
-        threaded_scan(net, ports, args.brief, args.output, "recon_all.json")
+        md_path = "recon.md" if args.format == "md" else None
+        threaded_scan(net, ports, args.brief, args.output, "recon_all.json", md_path)
     except ValueError:
         run_scan_for_ip(args.target, ports, args.brief, args.output)
 

@@ -2,13 +2,12 @@
 
 > Network recon ritual tool – IP scanner, banner grabber, and hint engine, built for pentesters, red teamers, and OSCP labs.
 
-<!-- ![screenshot](docs/screenshot.png) -->
-
 ## 🔮 Features
 - Multi-threaded port scanning
 - CIDR & subnet support (e.g., `192.168.1.0/24`)
 - Protocol-aware banner grabbing
 - JSON report output (per host + combined)
+- Markdown output with `--format md`
 - Modular hints engine via `hints.json`
 - Built-in test mode for safe scanning
 - Color-coded CLI output
@@ -41,14 +40,20 @@ nulltrace --target 192.168.1.0/24
 nulltrace --target 10.0.0.5 --ports 21 22 80 443 --brief
 ```
 
+### Markdown Output
+```bash
+nulltrace --target 10.0.0.5 --format md
+```
+
 ### Test Mode
 ```bash
 nulltrace --test
 ```
 
-### Output JSON
+### Output Files
 - Per host: `recon_<ip>.json`
 - All results: `recon_all.json`
+- Markdown summary: `recon.md`
 
 ## 💡 How Hints Work
 If a banner matches any keyword in `hints.json`, a recommendation is shown:
