@@ -1,29 +1,30 @@
 # NullTrace
 
-> Network recon ritual tool – IP scanner, banner grabber, and hint engine, built for pentesters, red teamers, and OSCP labs.
+> Network recon ritual tool – IP scanner, banner grabber, and hint engine for pentesters, red teamers, and OSCP labs.
 
-## 🔮 Features
+## Features
 - Multi-threaded port scanning
 - CIDR & subnet support (e.g., `192.168.1.0/24`)
 - Protocol-aware banner grabbing
-- JSON report output (per host + combined)
-- Markdown output with `--format md`
+- JSON and Markdown report output
 - Modular hints engine via `hints.json`
 - Built-in test mode for safe scanning
 - Color-coded CLI output
+- Robust error handling (DNS, socket, thread safety)
+- Version reporting (`--version`)
 
-## ⚙️ Installation
+## Installation
 ```bash
 pip install .
 ```
-Or to run it manually:
+Or to run manually:
 ```bash
 git clone https://github.com/youruser/NullTrace
 cd NullTrace
-python3 NullTrace.py --target 10.10.10.10
+python3 -m nulltrace.NullTrace --target 10.10.10.10
 ```
 
-## 🚀 Usage Examples
+## Usage Examples
 
 ### Basic Single Host
 ```bash
@@ -55,17 +56,15 @@ nulltrace --test
 - All results: `recon_all.json`
 - Markdown summary: `recon.md`
 
-## 💡 How Hints Work
+## How Hints Work
 If a banner matches any keyword in `hints.json`, a recommendation is shown:
 ```bash
 [+] 21/tcp - FTP - vsftpd 2.3.4 (Check for backdoor CVE-2011-2523)
 ```
-
 You can edit `hints.json` to expand or update detection logic.
 
-## 📄 License
+## License
 MIT License
 
 ---
-
 Built by Nullgrimoire ☠️
