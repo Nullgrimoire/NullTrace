@@ -4,9 +4,9 @@
 import argparse
 import ipaddress
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from scanner import scan_target, COMMON_PORTS
-from output import save_report, write_combined_report, write_markdown_report
-from hints import get_hint
+from nulltrace.scanner import scan_target, COMMON_PORTS
+from nulltrace.output import save_report, write_combined_report, write_markdown_report
+from nulltrace.hints import get_hint
 from colorama import Fore, Style, init
 
 init(autoreset=True)
