@@ -1,0 +1,10 @@
+{
+  "vsftpd 2.3.4": "Check for backdoor CVE-2011-2523",
+  "OpenSSH_6.6.1": "Check for outdated SSH version; weak algorithms may be supported",
+  "Apache/2.2": "Check for default files or outdated modules",
+  "MySQL": "Attempt login with default creds, then check version for vulns",
+  "phpMyAdmin": "Check for default creds and known RCEs",
+  "Microsoft-IIS/7.5": "Check for WebDAV and known exploits",
+  "SMB": "Check for SMBv1 and EternalBlue (CVE-2017-0144)",
+  "OpenSMTPD": "Check for command injection (CVE-2020-7247)"
+}
