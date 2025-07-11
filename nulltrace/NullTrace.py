@@ -35,7 +35,7 @@ def format_result(r, brief=False):
 
 def run_scan_for_ip(ip, ports, brief, output_path=None):
     try:
-        resolved_ip = socket.gethostbyname(ip)
+        resolved_ip = socket.gethostbyname(str(ip))
     except socket.gaierror:
         print(Fore.RED + f"[!] Could not resolve hostname: {ip}" + Style.RESET_ALL)
         return {"ip": ip, "open_ports": [], "error": "DNS resolution failed"}
