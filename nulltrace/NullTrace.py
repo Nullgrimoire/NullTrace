@@ -7,6 +7,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from nulltrace.scanner import scan_target, COMMON_PORTS
 from nulltrace.output import save_report, write_combined_report, write_markdown_report
 from nulltrace.hints import get_hint
+from nulltrace import __version__
 from colorama import Fore, Style, init
 
 init(autoreset=True)
@@ -66,7 +67,12 @@ def main():
     parser.add_argument("--test", action="store_true", help="Run against a known safe test target (scanme.nmap.org)")
     parser.add_argument("--brief", action="store_true", help="Only show open ports without banner details")
     parser.add_argument("--format", choices=["json", "md"], help="Output format for combined report")
+    parser.add_argument("--version", action="store_true", help="Show NullTrace version and exit")
     args = parser.parse_args()
+
+    if args.version:
+        print(f"NullTrace version: {__version__}")
+        return
 
     ports = args.ports if args.ports else list(COMMON_PORTS.keys())
 
